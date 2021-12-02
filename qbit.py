@@ -2,39 +2,20 @@
 
 from qbittorrent import Client
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 app = FastAPI()
-origins = [
-    "http://localhost",
-    "http://localhost:8002",
-    "http://127.0.0.1:8002",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 @app.get("/qbit")
 async def qBitDownload(magnet: str):
-    # 连接qbit的webUI
-    qbit = Client("http://100.102.167.97:7070/")
-    # 登录webUI
-    qbit.login("admin", "qbit666")
-
-    # 打印已有的torrent
-    # torrents = qbit.torrents()
-    # for torrent in torrents:
-    #     print(torrent["name"])
+    # 连接qbit的webUI，填写相应的qbit webUI访问地址
+    qbit = Client("http://ip:port")
+    # 登录webUI，填写相应的用户名、密码
+    qbit.login("username", "password")
+    # 开始下载
     qbit.download_from_link(magnet)
     return "done"
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', port=8008)
+    uvicorn.run(app, host='0.0.0.0', port=8000)
